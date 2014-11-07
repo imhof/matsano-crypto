@@ -12,8 +12,8 @@ fn main() {
     } else {
         let input = args[1].as_slice();
         match challenge1::from_hex(input) {
-            None => println!("Invalid hex string!"),
-            Some(binary) => println!("{}", challenge1::to_base64(&*binary))
+            Err(msg) => println!("Invalid hex string: {}", msg),
+            Ok(binary) => println!("{}", challenge1::to_base64(binary.as_slice()))
         }
     }
 }

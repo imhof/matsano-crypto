@@ -1,25 +1,33 @@
 
-pub fn from_hex(hex_in: &str) -> Option<Vec<u8>>
+pub fn from_hex(hex_in: &str) -> Result<Vec<u8>, &'static str>
 {
+    if hex_in.len() % 2 == 1 {
+        return Err("Odd string length in hex encoded value.");
+    }
+
     let mut bin_out = Vec::new();
 
-    let mut combined = 0u8;
+    let mut combined = 0u;
     let mut second_byte = false;
-    for c in hex_in.bytes() {
-        let nibble = (c & 0x0f) + ((c & 0x40) >> 6) * 9;
+
+    for c in hex_in.chars() {
+        let nibble = c.to_digit(16);
+        if nibble == None {
+            return Err("Invalid hex characters encountered.");
+        }
 
         if second_byte {
-            combined += nibble;
+            combined += nibble.unwrap();
             second_byte = false;
 
-            bin_out.push(combined);
+            bin_out.push(combined as u8);
         } else {
-            combined = nibble << 4;
+            combined = nibble.unwrap() << 4;
             second_byte = true;
         }
     }
 
-    Some(bin_out)
+    Ok(bin_out)
 }
 
 fn encode_single_base64(byte_in: u8) -> Option<char> {
@@ -73,11 +81,18 @@ fn encode_single_base64_fail() {
 
 #[test]
 fn from_hex_basics() {
-    assert_eq!(from_hex(""), Some(vec![]));
-    assert_eq!(from_hex("01"), Some(vec![1]));
-    assert_eq!(from_hex("ff"), Some(vec![255]));
-    assert_eq!(from_hex("A0"), Some(vec![160]));
-    assert_eq!(from_hex("A00AFf"), Some(vec![160, 10, 255]));
+    assert_eq!(from_hex(""), Ok(vec![]));
+    assert_eq!(from_hex("01"), Ok(vec![1]));
+    assert_eq!(from_hex("ff"), Ok(vec![255]));
+    assert_eq!(from_hex("A0"), Ok(vec![160]));
+    assert_eq!(from_hex("A00AFf"), Ok(vec![160, 10, 255]));
+}
+
+#[test]
+fn from_hex_fail() {
+    assert_eq!(from_hex("A"), Err("Odd string length in hex encoded value."));
+    assert_eq!(from_hex("ABCDEFGH"), Err("Invalid hex characters encountered."));
+    assert_eq!(from_hex("+#"), Err("Invalid hex characters encountered."));
 }
 
 #[test]
@@ -94,6 +109,6 @@ fn to_base64_rfc4648() {
 #[test]
 fn challenge1() {
     let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-    let output = to_base64( &*from_hex(input).unwrap() );
+    let output = to_base64( from_hex(input).ok().unwrap().as_slice() );
     assert_eq!(output, String::from_str("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"));
 }
