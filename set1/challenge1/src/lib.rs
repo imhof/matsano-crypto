@@ -60,21 +60,21 @@ pub fn to_base64(bin_in: &[u8]) -> String {
 #[test]
 fn from_hex_basics() {
     assert_eq!(from_hex(""), vec![]);
-    assert_eq!(from_hex("01"), vec![1u8]);
-    assert_eq!(from_hex("ff"), vec![255u8]);
-    assert_eq!(from_hex("A0"), vec![160u8]);
-    assert_eq!(from_hex("A00AFf"), vec![160u8, 10u8, 255u8]);
+    assert_eq!(from_hex("01"), vec![1]);
+    assert_eq!(from_hex("ff"), vec![255]);
+    assert_eq!(from_hex("A0"), vec![160]);
+    assert_eq!(from_hex("A00AFf"), vec![160, 10, 255]);
 }
 
 #[test]
 fn to_base64_rfc4648() {
    assert_eq!(to_base64([]), String::from_str(""));// ""
-   assert_eq!(to_base64([102]), String::from_str("Zg=="));// "f"
-   assert_eq!(to_base64([102,111]), String::from_str("Zm8="));// "fo"
-   assert_eq!(to_base64([102,111,111]), String::from_str("Zm9v"));// "foo"
-   assert_eq!(to_base64([102,111,111,98]), String::from_str("Zm9vYg==")); // "foob"
-   assert_eq!(to_base64([102,111,111,98,97]), String::from_str("Zm9vYmE=")); // "fooba"
-   assert_eq!(to_base64([102,111,111,98,97,114]), String::from_str("Zm9vYmFy")); // "foobar"
+   assert_eq!(to_base64("f".as_bytes()), String::from_str("Zg=="));
+   assert_eq!(to_base64("fo".as_bytes()), String::from_str("Zm8="));
+   assert_eq!(to_base64("foo".as_bytes()), String::from_str("Zm9v"));
+   assert_eq!(to_base64("foob".as_bytes()), String::from_str("Zm9vYg=="));
+   assert_eq!(to_base64("fooba".as_bytes()), String::from_str("Zm9vYmE="));
+   assert_eq!(to_base64("foobar".as_bytes()), String::from_str("Zm9vYmFy"));
 }
 
 #[test]
