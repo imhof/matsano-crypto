@@ -22,14 +22,14 @@ pub fn from_hex(hex_in: &str) -> Vec<u8>
     return bin_out;
 }
 
-fn encode_single_base64(byte_in: u8) -> char {
+fn encode_single_base64(byte_in: u8) -> Option<char> {
     match byte_in {
-        0...25 => (65u8 + byte_in) as char,
-        26...51 => (71u8 + byte_in) as char,
-        52...61 => (byte_in - 4u8) as char,
-        62 => '+',
-        63 => '/',
-        _ => ' ' // FIXME: error
+        0...25 => Some((65u8 + byte_in) as char),
+        26...51 => Some((71u8 + byte_in) as char),
+        52...61 => Some((byte_in - 4u8) as char),
+        62 => Some('+'),
+        63 => Some('/'),
+        _ => None
     }
 }
 
@@ -46,15 +46,29 @@ pub fn to_base64(bin_in: &[u8]) -> String {
         current += if i+2 < total { bin_in[i+2] as u32 } else { fill_bytes +=1; 0 };
 
         // encode
-        result.push(encode_single_base64(((current & 0x00fc0000) >> 18) as u8));
-        result.push(encode_single_base64(((current & 0x0003f000) >> 12) as u8));
-        result.push(if fill_bytes < 2 { encode_single_base64(((current & 0x00000fc0) >> 6) as u8) } else { '=' });
-        result.push(if fill_bytes < 1 { encode_single_base64((current & 0x0000003f) as u8 ) } else { '=' });
+        result.push(encode_single_base64(((current & 0x00fc0000) >> 18) as u8).unwrap());
+        result.push(encode_single_base64(((current & 0x0003f000) >> 12) as u8).unwrap());
+        result.push(if fill_bytes < 2 { encode_single_base64(((current & 0x00000fc0) >> 6) as u8).unwrap() } else { '=' });
+        result.push(if fill_bytes < 1 { encode_single_base64((current & 0x0000003f) as u8 ).unwrap() } else { '=' });
 
         i += 3;
     }
 
     result
+}
+
+#[test]
+fn encode_single_base64_basics() {
+    assert_eq!(encode_single_base64(0), Some('A'));
+    assert_eq!(encode_single_base64(27), Some('b'));
+    assert_eq!(encode_single_base64(61), Some('9'));
+    assert_eq!(encode_single_base64(63), Some('/'));
+}
+
+#[test]
+fn encode_single_base64_fail() {
+    assert_eq!(encode_single_base64(64), None);
+    assert_eq!(encode_single_base64(255), None);
 }
 
 #[test]
