@@ -1,5 +1,5 @@
 
-pub fn from_hex(hex_in: &str) -> Vec<u8>
+pub fn from_hex(hex_in: &str) -> Option<Vec<u8>>
 {
     let mut bin_out = Vec::new();
 
@@ -19,7 +19,7 @@ pub fn from_hex(hex_in: &str) -> Vec<u8>
         }
     }
 
-    return bin_out;
+    Some(bin_out)
 }
 
 fn encode_single_base64(byte_in: u8) -> Option<char> {
@@ -73,11 +73,11 @@ fn encode_single_base64_fail() {
 
 #[test]
 fn from_hex_basics() {
-    assert_eq!(from_hex(""), vec![]);
-    assert_eq!(from_hex("01"), vec![1]);
-    assert_eq!(from_hex("ff"), vec![255]);
-    assert_eq!(from_hex("A0"), vec![160]);
-    assert_eq!(from_hex("A00AFf"), vec![160, 10, 255]);
+    assert_eq!(from_hex(""), Some(vec![]));
+    assert_eq!(from_hex("01"), Some(vec![1]));
+    assert_eq!(from_hex("ff"), Some(vec![255]));
+    assert_eq!(from_hex("A0"), Some(vec![160]));
+    assert_eq!(from_hex("A00AFf"), Some(vec![160, 10, 255]));
 }
 
 #[test]
@@ -94,6 +94,6 @@ fn to_base64_rfc4648() {
 #[test]
 fn challenge1() {
     let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-    let output = to_base64( &*from_hex(input) );
+    let output = to_base64( &*from_hex(input).unwrap() );
     assert_eq!(output, String::from_str("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t"));
 }

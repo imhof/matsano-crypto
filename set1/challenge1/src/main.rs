@@ -5,8 +5,15 @@ extern crate challenge1;
 
 #[cfg(not(test))]
 fn main() {
-	let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-	let output = challenge1::to_base64( &*challenge1::from_hex(input) );
-	
-	std::io::println(&*output);
+    let args = std::os::args();
+    
+    if args.len() != 2 {
+        println!("USAGE: challenge1 HEX_ENCODED_STRING");
+    } else {
+        let input = args[1].as_slice();
+        match challenge1::from_hex(input) {
+            None => println!("Invalid hex string!"),
+            Some(binary) => println!("{}", challenge1::to_base64(&*binary))
+        }
+    }
 }
