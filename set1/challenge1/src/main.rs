@@ -1,6 +1,8 @@
 // Crypto challenge Set1 / Challenge 1
 // Convert hex to base64
 
+use std::io;
+
 fn from_hex(hex_in: &str) -> Vec<u8>
 {
 	let mut bin_out = Vec::new();
@@ -37,5 +39,5 @@ fn main() {
 	let input = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
 	let output = to_base64( &*from_hex(input) );
 	
-	println!("{}", output);
+	io::println(&*output);
 }
