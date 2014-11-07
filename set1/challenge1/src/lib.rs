@@ -7,24 +7,16 @@ pub fn from_hex(hex_in: &str) -> Result<Vec<u8>, &'static str>
 
     let mut bin_out = Vec::new();
 
-    let mut combined = 0u;
-    let mut second_byte = false;
+    let mut raw_chars = hex_in.chars().peekable();
+    while raw_chars.peek() != None {
+        let nibble1 = raw_chars.next().unwrap().to_digit(16);
+        let nibble2 = raw_chars.next().unwrap().to_digit(16);
 
-    for c in hex_in.chars() {
-        let nibble = c.to_digit(16);
-        if nibble == None {
+        if nibble1 == None || nibble2 == None {
             return Err("Invalid hex characters encountered.");
         }
 
-        if second_byte {
-            combined += nibble.unwrap();
-            second_byte = false;
-
-            bin_out.push(combined as u8);
-        } else {
-            combined = nibble.unwrap() << 4;
-            second_byte = true;
-        }
+        bin_out.push((nibble1.unwrap() * 16 + nibble2.unwrap()) as u8);
     }
 
     Ok(bin_out)
