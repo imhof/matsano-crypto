@@ -38,3 +38,20 @@ fn to_hex_basics() {
 	
 }
 
+#[test]
+fn fixed_xor_basics() {
+	assert_eq!(fixed_xor([],[]).unwrap(), vec![] );
+	assert_eq!(fixed_xor([1],[1]).unwrap(), vec![0] );
+	assert_eq!(fixed_xor([1],[0]).unwrap(), vec![1] );
+	assert_eq!(fixed_xor([0],[1]).unwrap(), vec![1] );
+	assert_eq!(fixed_xor([0,1],[1,0]).unwrap(), vec![1,1] );	
+	assert_eq!(fixed_xor([255,128],[64,127]).unwrap(), vec![191,255] );	
+}
+
+#[test]
+fn fixed_xor_fail() {
+	assert_eq!(fixed_xor([],[1]), None );
+	assert_eq!(fixed_xor([1],[]), None );
+	assert_eq!(fixed_xor([1,1],[1]), None );
+}
+
