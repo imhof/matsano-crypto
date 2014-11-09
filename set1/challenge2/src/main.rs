@@ -5,6 +5,7 @@ extern crate challenge2;
 use challenge2::to_hex;
 use challenge2::fixed_xor;
 
+#[cfg(not(test))]
 fn main() {
 	let test = challenge1::from_hex("AABB99");
 	println!("Hello, world! {}", test);
