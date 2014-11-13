@@ -1,5 +1,5 @@
 
-fn key_xor(data: &[u8], key: u8) -> Vec<u8> {
+pub fn key_xor(data: &[u8], key: u8) -> Vec<u8> {
     data.iter().map(|&x| x ^ key ).collect()
 }
 
@@ -24,7 +24,7 @@ fn count_letters(data: &[u8]) -> Vec<uint> {
     act_count
 }
 
-fn score(data: &[u8]) -> f64 {
+pub fn score(data: &[u8]) -> f64 {
     // normal frequencies of english letters a-z in %
     let nom_frequencies : &[f64] = [ 8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153, 0.772, 4.025,
         2.406, 6.749, 7.507, 1.929, 0.095, 5.987, 6.327, 9.056, 2.758, 0.978, 2.360, 0.150, 1.974, 0.074 ];
@@ -39,7 +39,7 @@ fn score(data: &[u8]) -> f64 {
     
     let act_frequencies : Vec<f64> = act_count.iter().map(|&v| (v as f64) * 100f64 / (total as f64)).collect();
         
-    (data.len() - total) as f64 + square_dist(nom_frequencies, act_frequencies.as_slice())
+    (data.len() - total) as f64 // + square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
 pub fn decode_xor(data: &[u8]) -> Vec<u8> {
