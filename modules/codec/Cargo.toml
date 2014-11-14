@@ -1,10 +1,5 @@
 [package]
 
-name = "challenge1"
+name = "codec"
 version = "0.0.1"
 authors = ["Steffen Imhof <mail@steffen-imhof.de>"]
-
-[dependencies.codec]
-path = "../../modules/codec"
-
-
