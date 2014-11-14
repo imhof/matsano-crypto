@@ -39,7 +39,7 @@ pub fn score(data: &[u8]) -> f64 {
     
     let act_frequencies : Vec<f64> = act_count.iter().map(|&v| (v as f64) * 100f64 / (total as f64)).collect();
         
-    (data.len() - total) as f64 // + square_dist(nom_frequencies, act_frequencies.as_slice())
+    (data.len() - total) as f64 + square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
 pub fn decode_xor(data: &[u8]) -> Vec<u8> {

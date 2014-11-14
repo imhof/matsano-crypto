@@ -1,8 +1,7 @@
 // Crypto challenge Set1 / Challenge 3
 // Decrypt single XOR chiffre
 
-extern crate challenge1;
-extern crate challenge2;
+extern crate codec;
 extern crate challenge3;
 
 #[cfg(not(test))]
@@ -13,7 +12,7 @@ fn main() {
         println!("USAGE: challenge3 HEX_ENCODED_STRING");
     } else {
         let input = args[1].as_slice();
-        match challenge1::from_hex(input) {
+        match codec::from_hex(input) {
             Err(msg) => println!("Invalid hex string: {}", msg),
             Ok(binary) => {
                 let result = challenge3::decode_xor(binary.as_slice());

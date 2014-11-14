@@ -4,8 +4,8 @@ name = "challenge3"
 version = "0.0.1"
 authors = ["Steffen Imhof <mail@steffen-imhof.de>"]
 
-[dependencies.challenge1]
-path = "../challenge1"
+[dependencies.codec]
+path = "../../modules/codec"
 
 [dependencies.challenge2]
 path = "../challenge2"
