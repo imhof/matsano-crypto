@@ -1,8 +1,7 @@
 // Crypto challenge Set1 / Challenge 4
 // Find single XOR chiffre
 
-extern crate challenge1;
-extern crate challenge2;
+extern crate codec;
 extern crate challenge3;
 extern crate challenge4;
 
@@ -22,7 +21,7 @@ fn main() {
         let mut line_number: uint = 0;
         for line in file.lines() {
             line_number += 1;
-            match challenge1::from_hex(line.ok().unwrap().trim()) {
+            match codec::from_hex(line.ok().unwrap().trim()) {
                 Err(msg) => println!("Invalid hex string: {}", msg),
                 Ok(binary) => {
                     let result = challenge3::decode_xor(binary.as_slice());

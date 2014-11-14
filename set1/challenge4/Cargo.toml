@@ -5,11 +5,8 @@ version = "0.0.1"
 authors = ["Steffen Imhof <mail@steffen-imhof.de>"]
 
 
-[dependencies.challenge1]
-path = "../challenge1"
-
-[dependencies.challenge2]
-path = "../challenge2"
+[dependencies.codec]
+path = "../../modules/codec"
 
 [dependencies.challenge3]
 path = "../challenge3"
