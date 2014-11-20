@@ -3,10 +3,13 @@ pub fn key_xor(data: &[u8], key: u8) -> Vec<u8> {
     data.iter().map(|&x| x ^ key ).collect()
 }
 
-fn square_dist(values1: &[f64], values2: &[f64]) -> f64 {    
+fn rel_square_dist(values1: &[f64], values2: &[f64]) -> f64 {    
     values1.iter()
            .zip(values2.iter())
-           .fold(0.0, |s, (&a, &b)| s + (b/a - 1.0) * (b/a - 1.0))
+           .fold(0.0, |s, (&a, &b)| {
+               let rel = if a != 0.0 {b/a - 1.0} else {1.0}; 
+               s + rel * rel
+           })
            .sqrt()
 }
 
@@ -34,12 +37,12 @@ pub fn score(data: &[u8]) -> f64 {
     
     if total == 0 {
         // no characters found at all
-        return 100.0f64
+        return data.len() as f64;
     }
     
     let act_frequencies : Vec<f64> = act_count.iter().map(|&v| (v as f64) * 100f64 / (total as f64)).collect();
         
-    (data.len() - total) as f64 + square_dist(nom_frequencies, act_frequencies.as_slice())
+    (data.len() - total) as f64 + rel_square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
 pub fn decode_xor(data: &[u8]) -> Vec<u8> {
@@ -65,10 +68,11 @@ fn test_key_xor() {
 }
 
 #[test]
-fn test_square_dist() {
-    assert_eq!(square_dist([],[]), 0.0f64);
-    assert_eq!(square_dist([0.0, 1.0],[1.0, 0.0]), 2.0.sqrt());
-    assert_eq!(square_dist([-1.0, 1.0, 1.0],[1.0, -1.0, 0.0]), 3.0);}
+fn test_rel_square_dist() {
+    assert_eq!(rel_square_dist([],[]), 0.0f64);
+    assert_eq!(rel_square_dist([1.0, 1.0],[1.0, 1.0]), 0.0);
+    assert_eq!(rel_square_dist([0.0, 1.0],[1.0, 0.0]), 2.0.sqrt());
+    assert_eq!(rel_square_dist([-1.0, 1.0, 1.0],[1.0, -1.0, 0.0]), 3.0);}
 
 #[test]
 fn test_count_letters() {
