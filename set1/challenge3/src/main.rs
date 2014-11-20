@@ -15,9 +15,11 @@ fn main() {
         match codec::from_hex(input) {
             Err(msg) => println!("Invalid hex string: {}", msg),
             Ok(binary) => {
-                let result = challenge3::decode_xor(binary.as_slice());
-                println!("Text {}", std::str::from_utf8(result.as_slice()));
-                println!("Raw {}", result);
+                let decoded = challenge3::decode_xor(binary.as_slice());
+                match std::str::from_utf8(decoded.as_slice()) {
+                    Some(result) => println!("Decoded: {}", result),
+                    None => println!("Failed to decode to UTF-8 string!")
+                }
             }
         }
     }
