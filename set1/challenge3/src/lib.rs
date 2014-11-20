@@ -31,7 +31,7 @@ pub fn score(data: &[u8]) -> f64 {
     // normal frequencies of english letters a-z in %
     let nom_frequencies : &[f64] = [ 8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153, 0.772, 4.025,
         2.406, 6.749, 7.507, 1.929, 0.095, 5.987, 6.327, 9.056, 2.758, 0.978, 2.360, 0.150, 1.974, 0.074 ];
-    
+
     let act_count = count_letters(data);
     let total = act_count.iter().fold(0, |s, &a| s + a);
     
@@ -45,21 +45,31 @@ pub fn score(data: &[u8]) -> f64 {
     (data.len() - total) as f64 + rel_square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
-pub fn decode_xor(data: &[u8]) -> Vec<u8> {
+pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8) {
     let mut best_score = 100.0f64;
     let mut best_result = vec![];
+    let mut best_key = 0u8;
     
     for key in range(0u8, 255u8) {
         let plain = key_xor(data, key);
+        let unprintable : uint = plain.iter().fold(0, |s, &c| s + if c < 32 { 1 } else { 0 } );
+
+        // unprintable characters are out immediately
+        if unprintable > 0 {
+            continue;
+        }
+
+
         let new_score = score(plain.as_slice());
            
         if new_score < best_score {
             best_result = plain;
             best_score = new_score;
+            best_key = key;
         }
     }
 
-    best_result
+    (best_result, best_key)
 }
 
 #[test]
