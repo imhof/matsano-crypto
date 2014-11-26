@@ -49,10 +49,12 @@ pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8) {
     let mut best_score = 100.0f64;
     let mut best_result = vec![];
     let mut best_key = 0u8;
+    // keep TAB, LF, CR as printable
+    let unprintable_chars : [u8, ..30]= [0,1,2,3,4,5,6,7,8,11,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,127];
     
     for key in range(0u8, 255u8) {
         let plain = key_xor(data, key);
-        let unprintable = plain.iter().filter( |&c| *c < 10 ).count();
+        let unprintable = plain.iter().filter( |&c| unprintable_chars.iter().any(|&v| v == *c) ).count();
 
         // unprintable characters are out immediately
         if unprintable > 0 {
