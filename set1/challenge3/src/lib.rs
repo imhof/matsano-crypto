@@ -87,15 +87,15 @@ fn test_rel_square_dist() {
 #[test]
 fn test_count_letters() {
     assert_eq!(count_letters([]), vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-    assert_eq!(count_letters("abcdabc".as_bytes()), vec![2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
-    assert_eq!(count_letters("zZzZxXxX".as_bytes()), vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,4]);
-    assert_eq!(count_letters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes()), vec![2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]);
+    assert_eq!(count_letters(b"abcdabc"), vec![2,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+    assert_eq!(count_letters(b"zZzZxXxX"), vec![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,4]);
+    assert_eq!(count_letters(b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), vec![2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]);
 }
 
 #[test]
 fn test_score_basics() {
-    assert_eq!(score([]), score("232093582§$%$!-_.,".as_bytes()) );
-    assert!(score([]) > score("A".as_bytes()) );
-    assert!(score("this is the end, my friend".as_bytes()) < score("7ufhgvbnftz56ufgvghtzuh54".as_bytes()) );
-    assert_eq!(score("this is the end, my friend".as_bytes()), score("endmythisfriend!!!theis.".as_bytes()) );
+    assert_eq!(score([]), score(b"232093582$%$!-_.,") );
+    assert!(score([]) > score(b"A") );
+    assert!(score(b"this is the end, my friend") < score(b"7ufhgvbnftz56ufgvghtzuh54") );
+    assert_eq!(score(b"this is the end, my friend"), score(b"endmythisfriend!!!theis.") );
 }

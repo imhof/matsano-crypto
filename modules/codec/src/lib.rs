@@ -109,12 +109,12 @@ fn test_from_hex_fail() {
 #[test]
 fn test_to_base64_rfc4648() {
    assert_eq!(to_base64([]), String::from_str(""));
-   assert_eq!(to_base64("f".as_bytes()), String::from_str("Zg=="));
-   assert_eq!(to_base64("fo".as_bytes()), String::from_str("Zm8="));
-   assert_eq!(to_base64("foo".as_bytes()), String::from_str("Zm9v"));
-   assert_eq!(to_base64("foob".as_bytes()), String::from_str("Zm9vYg=="));
-   assert_eq!(to_base64("fooba".as_bytes()), String::from_str("Zm9vYmE="));
-   assert_eq!(to_base64("foobar".as_bytes()), String::from_str("Zm9vYmFy"));
+   assert_eq!(to_base64(b"f"), String::from_str("Zg=="));
+   assert_eq!(to_base64(b"fo"), String::from_str("Zm8="));
+   assert_eq!(to_base64(b"foo"), String::from_str("Zm9v"));
+   assert_eq!(to_base64(b"foob"), String::from_str("Zm9vYg=="));
+   assert_eq!(to_base64(b"fooba"), String::from_str("Zm9vYmE="));
+   assert_eq!(to_base64(b"foobar"), String::from_str("Zm9vYmFy"));
 }
 
 #[test]
