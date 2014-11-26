@@ -7,7 +7,7 @@ fn rel_square_dist(values1: &[f64], values2: &[f64]) -> f64 {
     values1.iter()
            .zip(values2.iter())
            .fold(0.0, |s, (&a, &b)| {
-               let rel = if a != 0.0 {b/a - 1.0} else {1.0}; 
+               let rel = if a != 0.0 { b/a - 1.0 } else { 1.0 };
                s + rel * rel
            })
            .sqrt()
@@ -37,7 +37,7 @@ pub fn score(data: &[u8]) -> f64 {
     
     if total == 0 {
         // no characters found at all
-        return data.len() as f64;
+        return data.len() as f64 * 100.0;
     }
     
     let act_frequencies : Vec<f64> = act_count.iter().map(|&v| (v as f64) * 100f64 / (total as f64)).collect();
@@ -52,14 +52,14 @@ pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8) {
     
     for key in range(0u8, 255u8) {
         let plain = key_xor(data, key);
-        let unprintable : uint = plain.iter().fold(0, |s, &c| s + if c < 32 { 1 } else { 0 } );
+        let unprintable = plain.iter().filter( |&c| *c < 10 ).count();
 
         // unprintable characters are out immediately
         if unprintable > 0 {
             continue;
         }
 
-
+        // score the remaining possibilities
         let new_score = score(plain.as_slice());
            
         if new_score < best_score {
@@ -98,4 +98,10 @@ fn test_score_basics() {
     assert!(score([]) > score(b"A") );
     assert!(score(b"this is the end, my friend") < score(b"7ufhgvbnftz56ufgvghtzuh54") );
     assert_eq!(score(b"this is the end, my friend"), score(b"endmythisfriend!!!theis.") );
+}
+
+#[test]
+fn test_score_challenge() {
+    assert!( score([11, 42, 50, 101, 49, 45, 36, 49, 101, 49, 45, 32, 101, 53, 36, 55, 49, 60, 101, 44, 54, 101, 47, 48, 40, 53, 44, 43, 34, 79]) 
+           > score([78, 111, 119, 32, 116, 104, 97, 116, 32, 116, 104, 101, 32, 112, 97, 114, 116, 121, 32, 105, 115, 32, 106, 117, 109, 112, 105, 110, 103, 10]) )
 }
