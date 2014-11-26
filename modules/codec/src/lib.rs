@@ -1,4 +1,8 @@
-
+/// Reads a byte array from a hex encoded string.
+/// Case does not matter but if any non-hex character is encountered or the
+/// input's length is not even an error is returned.
+/// # Arguments
+/// * `str` - hex-coded string to convert
 pub fn from_hex(hex_in: &str) -> Result<Vec<u8>, &'static str>
 {
     if hex_in.len() % 2 == 1 {
@@ -22,7 +26,10 @@ pub fn from_hex(hex_in: &str) -> Result<Vec<u8>, &'static str>
     Ok(bin_out)
 }
 
-
+/// Converts a byte array into a hex encoded string.
+/// 
+/// # Arguments
+/// * `binary` - byte array to transform
 pub fn to_hex(binary: &[u8]) -> String {
 
     fn to_hex_char(byte: u8) -> char { Char::from_digit(byte as uint, 16).unwrap() }
