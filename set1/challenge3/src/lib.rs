@@ -42,11 +42,11 @@ pub fn score(data: &[u8]) -> f64 {
     
     let act_frequencies : Vec<f64> = act_count.iter().map(|&v| (v as f64) * 100f64 / (total as f64)).collect();
         
-    (data.len() - total) as f64 + rel_square_dist(nom_frequencies, act_frequencies.as_slice())
+    (data.len() - total) as f64 * 10.0 + rel_square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
 pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8, f64) {
-    let mut best_score = 100.0f64;
+    let mut best_score = 1000.0f64;
     let mut best_result = vec![];
     let mut best_key = 0u8;
     // keep TAB, LF, CR as printable
