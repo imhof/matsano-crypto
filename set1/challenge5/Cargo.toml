@@ -1,0 +1,12 @@
+[package]
+
+name = "challenge5"
+version = "0.0.1"
+authors = ["Steffen Imhof <mail@steffen-imhof.de>"]
+
+
+[dependencies.codec]
+path = "../../modules/codec"
+
+[dependencies.challenge3]
+path = "../challenge3"

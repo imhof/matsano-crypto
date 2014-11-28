@@ -1,6 +1,6 @@
 
-pub fn key_xor(data: &[u8], key: u8) -> Vec<u8> {
-    data.iter().map(|&x| x ^ key ).collect()
+pub fn key_xor(data: &[u8], key: &[u8]) -> Vec<u8> {
+    data.iter().zip(key.iter().cycle()).map(|(&x, &key)| x ^ key ).collect()
 }
 
 fn rel_square_dist(values1: &[f64], values2: &[f64]) -> f64 {    
@@ -53,7 +53,7 @@ pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8, f64) {
     let unprintable_chars : [u8, ..30]= [0,1,2,3,4,5,6,7,8,11,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,127];
     
     for key in range(0u8, 255u8) {
-        let plain = key_xor(data, key);
+        let plain = key_xor(data, [key]);
         let unprintable = plain.iter().filter( |&c| unprintable_chars.iter().any(|&v| v == *c) ).count();
 
         // unprintable characters are out immediately
@@ -76,7 +76,7 @@ pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8, f64) {
 
 #[test]
 fn test_key_xor() {
-    assert_eq!(key_xor([255, 128, 0], 64), vec![191, 192, 64]);
+    assert_eq!(key_xor([255, 128, 0], [64]), vec![191, 192, 64]);
 }
 
 #[test]
