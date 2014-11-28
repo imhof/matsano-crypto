@@ -19,6 +19,10 @@ fn main() {
         let mut file = BufferedReader::new(File::open(&path));
         
         let mut line_number: uint = 0;
+        let mut best_score = 1000.0f64;
+        let mut best_result = String::new();
+        let mut best_key = 0u8;
+                
         for line in file.lines() {
             line_number += 1;
             match codec::from_hex(line.ok().unwrap().trim()) {
@@ -26,12 +30,20 @@ fn main() {
                 Ok(binary) => {
                     match challenge3::decode_xor(binary.as_slice()) {
                         (result, key, score) => match std::str::from_utf8(result.as_slice()) {
-                            Some(result) => println!("Line {}: {}, Key {}, Score: {}", line_number, result, key, score),
+                            Some(plaintext) => {
+                                if score < best_score {
+                                    best_result = plaintext.to_string();
+                                    best_score = score;
+                                    best_key = key;
+                                }
+                            },
                             None => ()
                         }
                     }
                 }
             }
         }
+        
+        println!("Line {}: {}, Key {}, Score: {}", line_number, best_result, best_key, best_score);
     }
 }
