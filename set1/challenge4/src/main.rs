@@ -25,8 +25,8 @@ fn main() {
                 Err(msg) => println!("Invalid hex string: {}", msg),
                 Ok(binary) => {
                     match challenge3::decode_xor(binary.as_slice()) {
-                        (result, key) => match std::str::from_utf8(result.as_slice()) {
-                            Some(result) => println!("Line {}: {}, Key {}", line_number, result, key),
+                        (result, key, score) => match std::str::from_utf8(result.as_slice()) {
+                            Some(result) => println!("Line {}: {}, Key {}, Score: {}", line_number, result, key, score),
                             None => ()
                         }
                     }

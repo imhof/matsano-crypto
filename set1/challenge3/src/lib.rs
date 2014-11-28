@@ -45,7 +45,7 @@ pub fn score(data: &[u8]) -> f64 {
     (data.len() - total) as f64 + rel_square_dist(nom_frequencies, act_frequencies.as_slice())
 }
 
-pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8) {
+pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8, f64) {
     let mut best_score = 100.0f64;
     let mut best_result = vec![];
     let mut best_key = 0u8;
@@ -71,7 +71,7 @@ pub fn decode_xor(data: &[u8]) -> (Vec<u8>, u8) {
         }
     }
 
-    (best_result, best_key)
+    (best_result, best_key, best_score)
 }
 
 #[test]
