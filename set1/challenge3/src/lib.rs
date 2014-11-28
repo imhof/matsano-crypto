@@ -96,10 +96,9 @@ fn test_count_letters() {
 
 #[test]
 fn test_score_basics() {
-    assert_eq!(score([]), score(b"232093582$%$!-_.,") );
-    assert!(score([]) > score(b"A") );
+    assert!(score(b"?") > score(b"A") );
     assert!(score(b"this is the end, my friend") < score(b"7ufhgvbnftz56ufgvghtzuh54") );
-    assert_eq!(score(b"this is the end, my friend"), score(b"endmythisfriend!!!theis.") );
+    assert_eq!(score(b"this is the end, my friend"), score(b"endmythisfriend     ,theis") );
 }
 
 #[test]
